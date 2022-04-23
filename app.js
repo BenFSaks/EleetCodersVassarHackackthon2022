@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname,'public/css')))
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
-let YOUR_API_KEY = "b65866ea-d18e-4b4d-9ee2-9d5c540dfaf4"
+let YOUR_API_KEY = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
 
 
 var https = require('follow-redirects').https;
@@ -24,17 +24,10 @@ var options = {
   'maxRedirects': 20
 };
 
-
-function printCities(cities){
-    citiesJson = JSON.parse(cities)
-    console.log(citiesJson.data[0].city)
-}
-
-
 loadAQI()
-//Get Air Quality Index 
-function loadAQI(){ 
-    let getNearCitiesCall = new Promise ((resolve, reject) => { 
+//Get Air Quality Index
+function loadAQI(){
+    let getNearCitiesCall = new Promise ((resolve, reject) => {
 
         var req = https.request(options, function(res){
             var chunks = []
@@ -42,7 +35,7 @@ function loadAQI(){
                 chunks.push(chunk);
             });
             res.on("end", function (chunk) {
-                var body = Buffer.concat(chunks);  
+                var body = Buffer.concat(chunks);
                 resolve(body)
             });
 
@@ -55,18 +48,66 @@ function loadAQI(){
             console.log(error)
         })
         req.end();
-            
+
     })
     getNearCitiesCall.then((response) => {
         let Cities = response
-        printCities(Cities)
+        getCitiesData(Cities)
     }).catch((error) =>{
         console.log(error)
     })
-    let getNear
+
 }
 
+function getCitiesData(cities){
+    citiesJson = JSON.parse(cities)
+    console.log(citiesJson)
+    cityNames = citiesJson.data
+}
 
+function getData(city) {
+  var options2 = {
+    'method': 'GET',
+    'hostname': 'api.airvisual.com',
+    'path': `/v2/city?city=${city}&state=${STATE_NAME}&country=USA&key=${YOUR_API_KEY}`,
+    'headers': {
+    },
+    'maxRedirects': 20
+  };
+  let getCityData = new Promise ((resolve, reject) => {
+
+      var req = https.request(options2, function(res){
+          var chunks = []
+          res.on("data", function (chunk) {
+              chunks.push(chunk);
+          });
+          res.on("end", function (chunk) {
+              var body = Buffer.concat(chunks);
+              resolve(body)
+          });
+
+          res.on("error", function (error) {
+              reject(error)
+          });
+
+      },
+      (error) => {
+          console.log(error)
+      })
+      req.end();
+  })
+  getCityData.then((response) => {
+      let data = response
+      printCityData(data)
+  }).catch((error) =>{
+      console.log(error)
+  })
+}
+
+function printCityData(data) {
+  dataJson = JSON.parse(data)
+  console.log(dataJson)
+}
 
 
 
