@@ -1,3 +1,5 @@
-#home .nav-link{
+#home .nav-link,
+#top-polluted .nav-link,
+#locations .nav-link{
     padding: 0 20px;
 }
