@@ -63,6 +63,7 @@ function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
     console.log(citiesJson)
     cityNames = citiesJson.data
+    getData(cityNames[0].city)
 }
 
 function getData(city) {
@@ -106,7 +107,8 @@ function getData(city) {
 
 function printCityData(data) {
   dataJson = JSON.parse(data)
-  console.log(dataJson)
+  weather = dataJson.data.current.pollution
+  console.log(weather.aqius)
 }
 
 
