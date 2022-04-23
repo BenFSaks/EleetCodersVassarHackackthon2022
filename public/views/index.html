@@ -44,18 +44,18 @@
         </header>
         <main class="container mt-3">
             <h4 class="my-2">Search for nearby locations</h4>
-            <form class="row" >
+            <form class="row" id="nearby-form">
                 <div class="col-4">
                     <label for="exampleFormControlInput1" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                    <input type="text" class="form-control" id="country">
                 </div>
                 <div class="col-4">
                     <label for="exampleFormControlInput1" class="form-label">State</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                    <input type="text" class="form-control" id="state">
                 </div>
                 <div class="col-4">
                     <label for="exampleFormControlInput1" class="form-label">City</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                    <input type="text" class="form-control" id="city">
                 </div>
                 <div class="col-12 my-4">
                   <button class="btn btn-primary" type="submit">Search</button>
@@ -74,11 +74,11 @@
                             <th scope="col">View on Map</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="table-data">
                             <tr>
                             <td>New York City</td>
                             <td>###</td>
-                            <td><i class="fa-solid fa-circle-info"></i></td>
+                            <td><i class="fa-solid fa-circle-info" id="view"></i></td>
                             </tr>
                         </tbody>
                         </table>
@@ -92,58 +92,157 @@
     </div>
     <script>
         var map;
+        class NearBy{
+            constructor(country, city, state) {
+                this.innerHTML = `<tr>
+                                    <td>${country}</td>
+                                    <td>${city}</td>
+                                    <td><i class="fa-solid fa-circle-info" id="view"></i></td>
+                                </tr>`;
+            }
+        }
+
+        const nearByForm = document.getElementById('nearby-form');
+        nearByForm.addEventListener('submit', getNearbyLocations);
+
+        const locations = []
+
+        function getNearbyLocations(e){
+            e.preventDefault();
+            let country = document.getElementById('country').value;
+            let city = document.getElementById('city').value;
+            let state = document.getElementById('state').value;
+
+            locations.forEach(location => {
+                let newNearBy = new NearBy(country, city, state);
+                document.getElementById('table-data').innerHTML = newNearBy.innerHTML;
+            });
+
+            //call request, set to locations
+        }
+
+        window.onload = () => {
+            let view = document.querySelectorAll('#view');
+            view.forEach(v => {
+                v.addEventListener('click', () => {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: location.data.location.coordinates[0],
+                        lng: location.data.location.coordinates[1]
+                    },
+                    zoom: 4
+                    })
+                });
+            });
+        }
+
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: -34.397, lng: 150.644},
-                zoom: 2
+                zoom: 4
             });
-
-            var marker = new google.maps.Marker({
-                position: {lat: -34.397, lng: 150.644},
-                map: map,
-                title: 'Hello World!'
-            });
-
-            var infoWindow = new google.maps.InfoWindow({
-                content: '<h1>Hello World!</h1>'
-            });
-
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-
-            var markers = [
-                {
-                    coords: {lat: 42.4668, lng: -70.9495},
-                    content: '<h1>Lynn MA</h1>'
-                }
-            ]
-
-            for (var i = 0; i < markers.length; i++) {
-                addMarker(markers[i]);
-            }
-
-            function addMarker(props){
-                var marker = new google.maps.Marker({
-                    position: props.coords,
-                    map: map
-                });
-
-                if(props.iconImage){
-                    marker.setIcon(props.iconImage);
-                }
-
-                if(props.content){
-                    var infoWindow = new google.maps.InfoWindow({
-                        content: props.content
-                    });
-
-                    marker.addListener('click', function(){
-                        infoWindow.open(map, marker);
-                    });
-                }
-            }            
         }
+
+        const list = {}
+
+        
+
+            // var marker = new google.maps.Marker({
+            //     position: {lat: -34.397, lng: 150.644},
+            //     map: map,
+            //     title: 'Hello World!'
+            // });
+
+            // var infoWindow = new google.maps.InfoWindow({
+            //     content: '<h1>Hello World!</h1>'
+            // });
+
+            // marker.addListener('click', function() {
+            //     infoWindow.open(map, marker);
+            // });
+
+            // var markers = [
+            //     {
+            //         coords: {lat: 42.4668, lng: -70.9495},
+            //         content: '<h1>Lynn MA</h1>'
+            //     }
+            // ]
+
+            // var markers = locations.map(location => {
+            //     var marker = new google.maps.Marker({
+            //         position: {
+            //             lat: location.data.location.coordinates[0],
+            //             lng: location.data.location.coordinates[1]
+            //         },
+            //         map: map,
+            //     });
+
+            //     marker.addListener('click', function() {
+            //         infoWindow.setContent(location.data.location.city);
+            //         infoWindow.open(map, marker);
+            //     });
+
+            //     if(props.iconImage){
+            //         marker.setIcon(props.iconImage);
+            //     }
+            // });
+
+            // for (var i = 0; i < markers.length; i++) {
+            //     addMarker(markers[i]);
+            // }
+
+            // function addMarker(props){
+            //     var marker = new google.maps.Marker({
+            //         position: props.coords,
+            //         map: map
+            //     });
+
+            //     if(props.iconImage){
+            //         marker.setIcon(props.iconImage);
+            //     }
+
+            //     if(props.content){
+            //         var infoWindow = new google.maps.InfoWindow({
+            //             content: props.content
+            //         });
+
+            //         marker.addListener('click', function(){
+            //             infoWindow.open(map, marker);
+            //         });
+            //     }
+            //}            
+        //}
+
+        // const nearByForm = document.getElementById('nearby-form');
+        // nearByForm.addEventListener('submit', getNearbyLocations);
+
+        // const locations = []
+
+        // function getNearbyLocations(e){
+        //     e.preventDefault();
+        //     let country = document.getElementById('country').value;
+        //     let city = document.getElementById('city').value;
+        //     let state = document.getElementById('state').value;
+
+        //     document.getElementById('table-data').innerHTML = locations.map(location => {
+        //         return(
+        //             `<td>${location.data.city}</td>
+        //             <td>${location.pollution.aqius}</td>
+        //             <td><i class="fa-solid fa-circle-info"></i></td>`
+        //         )
+        //     })
+        // }
+
+        // const view = document.getElementById('view');
+        // view.addEventListener('click', function(){
+        //     map = new google.maps.Map(document.getElementById('map'), {
+        //         center: {}
+        //         {lat: -34.397, lng: 150.644},
+        //         zoom: 2
+        //     });
+        // })
+
+
     </script>
 <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSHtNiuqGxHsCgOxB0DyXR59lrk9KkaHo&callback=initMap">
@@ -151,5 +250,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script src="./js/script.js"></script>
 </body>
 </html>
