@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Simple Map</title>
 </head>
 <style>
@@ -13,7 +16,80 @@
     }
 </style>
 <body>
-    <div id="map"></div>
+    <div id="home">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container">
+                  <a class="navbar-brand" href="#">Navbar</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="locations.html">Locations</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="topPolluted.html">Top Polluted</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Organizations</a>
+                      </li>
+                  </div>
+                </div>
+              </nav>
+        </header>
+        <main class="container mt-3">
+            <h4 class="my-2">Search for nearby locations</h4>
+            <form class="row" >
+                <div class="col-4">
+                    <label for="exampleFormControlInput1" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                </div>
+                <div class="col-4">
+                    <label for="exampleFormControlInput1" class="form-label">State</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                </div>
+                <div class="col-4">
+                    <label for="exampleFormControlInput1" class="form-label">City</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1">
+                </div>
+                <div class="col-12 my-4">
+                  <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+              </form>
+            <div class="row my-5">
+                <div class="col-6">
+                    <img src="" alt="Air Pollution">
+                </div>
+                <div class="col-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Location- City</th>
+                            <th scope="col">AQL</th>
+                            <th scope="col">View on Map</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td>New York City</td>
+                            <td>###</td>
+                            <td><i class="fa-solid fa-circle-info"></i></td>
+                            </tr>
+                        </tbody>
+                        </table>
+                </div>
+            </div>
+        
+            <div id="map" class="container my-4"></div>
+
+        </main>
+
+    </div>
     <script>
         var map;
         function initMap() {
@@ -39,16 +115,13 @@
             var markers = [
                 {
                     coords: {lat: 42.4668, lng: -70.9495},
-                    iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                     content: '<h1>Lynn MA</h1>'
                 }
             ]
 
-            addMarker({
-                coords: {lat: 42.4668, lng: -70.9495},
-                iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-                content: '<h1>Lynn MA</h1>'
-            });
+            for (var i = 0; i < markers.length; i++) {
+                addMarker(markers[i]);
+            }
 
             function addMarker(props){
                 var marker = new google.maps.Marker({
@@ -75,5 +148,8 @@
 <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSHtNiuqGxHsCgOxB0DyXR59lrk9KkaHo&callback=initMap">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </body>
 </html>
