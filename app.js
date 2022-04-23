@@ -3,9 +3,9 @@ const path = require('path')
 
 
 var app = express()
-//app.set('views', path.join(__dirname, 'public/views'))
+app.set('views', path.join(__dirname, 'public/views'))
 app.use(express.static(path.join(__dirname,'public/views')))
-app.use(express.static(path.join(__dirname,'public/css')))
+//app.use(express.static(path.join(__dirname,'public/css')))
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
@@ -24,7 +24,7 @@ var options = {
   'maxRedirects': 20
 };
 
-loadAQI()
+//loadAQI()
 //Get Air Quality Index
 function loadAQI(){
     let getNearCitiesCall = new Promise ((resolve, reject) => {
@@ -137,10 +137,13 @@ function printCityData(data) {
 
 // Routing
 app.get('/', (req,res) =>{
-    res.render("index.html")
+    res.render("index.ejs")
+})
+app.get('/form', (req,res) =>{
+    res.render("form.ejs")
 })
 app.post('/', (req,res)=>{
-    cityName = req.body.parms()
+    console.log("hey")
 
 })
 
