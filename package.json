@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "startServer": "nodemon app.js"
+    "server": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "follow-redirects": "^1.14.9",
     "nodemon": "^2.0.15"
   }
 }
