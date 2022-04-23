@@ -4,11 +4,76 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Simple Map</title>
 </head>
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
 <body>
-    <h1>Hello World</h1>
-    
+    <div id="map"></div>
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -34.397, lng: 150.644},
+                zoom: 2
+            });
+
+            var marker = new google.maps.Marker({
+                position: {lat: -34.397, lng: 150.644},
+                map: map,
+                title: 'Hello World!'
+            });
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: '<h1>Hello World!</h1>'
+            });
+
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+
+            var markers = [
+                {
+                    coords: {lat: 42.4668, lng: -70.9495},
+                    iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                    content: '<h1>Lynn MA</h1>'
+                }
+            ]
+
+            addMarker({
+                coords: {lat: 42.4668, lng: -70.9495},
+                iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                content: '<h1>Lynn MA</h1>'
+            });
+
+            function addMarker(props){
+                var marker = new google.maps.Marker({
+                    position: props.coords,
+                    map: map
+                });
+
+                if(props.iconImage){
+                    marker.setIcon(props.iconImage);
+                }
+
+                if(props.content){
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                    });
+
+                    marker.addListener('click', function(){
+                        infoWindow.open(map, marker);
+                    });
+                }
+            }            
+        }
+    </script>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSHtNiuqGxHsCgOxB0DyXR59lrk9KkaHo&callback=initMap">
+</script>
 </body>
 </html>
