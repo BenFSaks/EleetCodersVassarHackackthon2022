@@ -32,7 +32,7 @@
             </div>
           </nav>
     </header>
-        <main class="container mt-3"> 
+        <main class="container mt-3">
             <h1 class="text-center mb-5">Top Polluted Locations</h1>
 
             <table class="table">
@@ -44,7 +44,7 @@
                     </tr>
                 </thead>
                 <tbody id="table-data">
-                  <% cityList.forEach((city) => { %>  
+                  <% cityList.forEach((city) => { %>
                   <tr>
                         <td>
                           <%= city.country %>
@@ -63,7 +63,7 @@
         </main>
 
     </div>
-    
+
 <script>
   class TopPolluted{
     constructor(country, city, AQL){
