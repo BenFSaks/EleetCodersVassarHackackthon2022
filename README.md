@@ -1,4 +1,5 @@
-# EleetCoder Vassar Hackathon 
-## Participants: Johnny Tejada, Benjamin Saks, Yuvraj Singh 
+# EleetCoders Vassar Hackathon
+
+## Participants: Johnny Tejada, Benjamin Saks, Yuvraj Singh
 
 ## Prompt:
