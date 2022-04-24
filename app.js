@@ -1,10 +1,19 @@
 const express = require('express')
 const path = require('path')
-
+const bodyParser = require('body-parser')
 
 var app = express()
+
 app.set('views', path.join(__dirname, 'public/views'))
 app.use(express.static(path.join(__dirname,'public/views')))
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json())
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");  
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");  
+    next();
+  })
 //app.use(express.static(path.join(__dirname,'public/css')))
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
@@ -143,8 +152,7 @@ app.get('/form', (req,res) =>{
     res.render("form.ejs")
 })
 app.post('/', (req,res)=>{
-    console.log("hey")
-
+    res.send(req.body)
 })
 
 app.listen(3000)

@@ -1,59 +1,148 @@
-const data = 
-{
-    "status": "success",
-    "data": {
-      "name": "Eilat Harbor",
-      "city": "Eilat",
-      "state": "South District",
-      "country": "Israel",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          34.939443,
-          29.531814
-        ]
-      },
-      "forecasts": [ //object containing forecast information
-        {
-          "ts": "2017-02-01T03:00:00.000Z",  //timestamp
-          "aqius": 21, //AQI value based on US EPA standard
-          "aqicn": 7, //AQI value based on China MEP standard
-          "tp": 8, //temperature in Celsius
-          "tp_min": 6, //minimum temperature in Celsius
-          "pr": 976,  //atmospheric pressure in hPa
-          "hu": 100, //humidity %
-          "ws": 3, //wind speed (m/s)
-          "wd": 313, //wind direction, as an angle of 360° (N=0, E=90, S=180, W=270)
-          "ic": "10n" //weather icon code, see below for icon index
-        }, 
-      // contains more forecast data for upcoming 76 hours
-      ],
-      "current": {
-        "weather": {
-          "ts": "2017-02-01T01:00:00.000Z",
-          "tp": 12,
-          "pr": 1020,
-          "hu": 62,
-          "ws": 2,
-          "wd": 320,
-          "ic": "01n"
-        },
-        "pollution": {
-          "ts": "2017-02-01T01:15:00.000Z",
-          "aqius": 18,
-          "mainus": "p1", //main pollutant for US AQI
-          "aqicn": 20,
-          "maincn": "p1",  //main pollutant for Chinese AQI
-          "p1": {   //pollutant details, concentration and appropriate AQIs
-            "conc": 20,
-            "aqius": 18,
-            "aqicn": 20
-          }
-        }
-      }
-    }
-}
+require("https://maps.googleapis.com/maps/api/js?key=AIzaSyDSHtNiuqGxHsCgOxB0DyXR59lrk9KkaHo&callback=initMap")
 
-function getData() {
-    return data;
-}
+var map;
+    class NearBy{
+        constructor(country, city, state) {
+            this.innerHTML = `<tr>
+                                <td>${country}</td>
+                                <td>${city}</td>
+                                <td><i class="fa-solid fa-circle-info" id="view"></i></td>
+                            </tr>`;
+        }
+    }
+
+    const nearByForm = document.getElementById('nearby-form');
+    nearByForm.addEventListener('submit', getNearbyLocations);
+
+    const locations = []
+
+  function getNearbyLocations(e){
+        e.preventDefault();
+        let country = document.getElementById('country').value;
+        let city = document.getElementById('city').value;
+        let state = document.getElementById('state').value;
+
+        locations.forEach(location => {
+            let newNearBy = new NearBy(country, city, state);
+            document.getElementById('table-data').innerHTML = newNearBy.innerHTML;
+        });
+
+        //call request, set to locations
+    }
+
+    window.onload = () => {
+        let view = document.querySelectorAll('#view');
+        view.forEach(v => {
+            v.addEventListener('click', () => {
+                map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: location.data.location.coordinates[0],
+                    lng: location.data.location.coordinates[1]
+                },
+                zoom: 4
+                })
+            });
+        });
+    }
+
+    export function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+    }
+
+        // var marker = new google.maps.Marker({
+        //     position: {lat: -34.397, lng: 150.644},
+        //     map: map,
+        //     title: 'Hello World!'
+        // });
+
+        // var infoWindow = new google.maps.InfoWindow({
+        //     content: '<h1>Hello World!</h1>'
+        // });
+
+        // marker.addListener('click', function() {
+        //     infoWindow.open(map, marker);
+        // });
+
+        // var markers = [
+        //     {
+        //         coords: {lat: 42.4668, lng: -70.9495},
+        //         content: '<h1>Lynn MA</h1>'
+        //     }
+        // ]
+
+        // var markers = locations.map(location => {
+        //     var marker = new google.maps.Marker({
+        //         position: {
+        //             lat: location.data.location.coordinates[0],
+        //             lng: location.data.location.coordinates[1]
+        //         },
+        //         map: map,
+        //     });
+
+        //     marker.addListener('click', function() {
+        //         infoWindow.setContent(location.data.location.city);
+        //         infoWindow.open(map, marker);
+        //     });
+
+        //     if(props.iconImage){
+        //         marker.setIcon(props.iconImage);
+        //     }
+        // });
+
+        // for (var i = 0; i < markers.length; i++) {
+        //     addMarker(markers[i]);
+        // }
+
+        // function addMarker(props){
+        //     var marker = new google.maps.Marker({
+        //         position: props.coords,
+        //         map: map
+        //     });
+
+        //     if(props.iconImage){
+        //         marker.setIcon(props.iconImage);
+        //     }
+
+        //     if(props.content){
+        //         var infoWindow = new google.maps.InfoWindow({
+        //             content: props.content
+        //         });
+
+        //         marker.addListener('click', function(){
+        //             infoWindow.open(map, marker);
+        //         });
+        //     }
+        //}            
+    //}
+
+    // const nearByForm = document.getElementById('nearby-form');
+    // nearByForm.addEventListener('submit', getNearbyLocations);
+
+    // const locations = []
+
+    // function getNearbyLocations(e){
+    //     e.preventDefault();
+    //     let country = document.getElementById('country').value;
+    //     let city = document.getElementById('city').value;
+    //     let state = document.getElementById('state').value;
+
+    //     document.getElementById('table-data').innerHTML = locations.map(location => {
+    //         return(
+    //             `<td>${location.data.city}</td>
+    //             <td>${location.pollution.aqius}</td>
+    //             <td><i class="fa-solid fa-circle-info"></i></td>`
+    //         )
+    //     })
+    // }
+
+    // const view = document.getElementById('view');
+    // view.addEventListener('click', function(){
+    //     map = new google.maps.Map(document.getElementById('map'), {
+    //         center: {}
+    //         {lat: -34.397, lng: 150.644},
+    //         zoom: 2
+    //     });
+    // })
