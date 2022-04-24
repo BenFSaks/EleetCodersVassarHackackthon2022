@@ -86,7 +86,9 @@ function loadAQI(STATE_NAME, COUNTRY_NAME) {
 function getCitiesData(cities, STATE_NAME, COUNTRY_NAME) {
     citiesJson = JSON.parse(cities)
     cityNames = citiesJson.data
-    getData(cityNames[i].city, YOUR_API_KEYS[Math.floor(Math.random()*7)], STATE_NAME, COUNTRY_NAME)
+    for (let i = 0; i < cityNames.length; i++) {
+        getData(cityNames[i].city, YOUR_API_KEYS[Math.floor(Math.random()*7)], STATE_NAME, COUNTRY_NAME)
+    }
 }
 
 function getData(city, key, STATE_NAME, COUNTRY_NAME) {
@@ -172,9 +174,6 @@ app.get('/top-polluted' ,(req, res) =>{
 app.get('/organizations' ,(req, res) =>{
     res.render("organizations.ejs")
 })
-
-
-
 
 // Routing
 app.get('/', (req,res) =>{
