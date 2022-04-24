@@ -37,15 +37,24 @@
                     <tr>
                     <th scope="col">Country</th>
                     <th scope="col">City</th>
-                    <th scope="col">AQL</th>
+                    <th scope="col">AQI</th>
                     </tr>
                 </thead>
                 <tbody id="table-data">
-                    <tr>
-                    <td></td>
-                    <td>New York City</td>
-                    <td>###</td>
-                    </tr>
+                  <% cityList.forEach((city) => { %>  
+                  <tr>
+                        <td>
+                          <%= city.country %>
+                        </td>
+                        <td>
+                          <%= city.city %>
+                        </td>
+                        <td>
+                          <%= city.pollution %>
+                        </td>
+
+                  </tr>
+                  <% }) %>
                 </tbody>
             </table>
         </main>

@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
-let YOUR_API_KEY = "b23a158b-58cb-4889-9464-60cc78ce9cdc"
+let YOUR_API_KEY = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
 
 
 var https = require('follow-redirects').https;
@@ -34,7 +34,7 @@ var options = {
   'maxRedirects': 20
 };
 
-//loadAQI()
+loadAQI()
 //Get Air Quality Index
 function loadAQI(){
     let getNearCitiesCall = new Promise ((resolve, reject) => {
@@ -73,7 +73,7 @@ function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
     console.log(citiesJson)
     cityNames = citiesJson.data
-    for(let i = 0; i < 5; i++  ) {
+    for(let i = 0; i < 2; i++  ) {
         getData(cityNames[i].city)
     }
     console.log(cityNames.length)
@@ -121,13 +121,14 @@ let citiesList = []
 
 function printCityData(data) {
   dataJson = JSON.parse(data)
+  console.log(dataJson)
   cityData = {}
   cityData.coords = dataJson.data.location.coordinates
   cityData.city = dataJson.data.city
   cityData.pollution = dataJson.data.current.pollution.aqius
   citiesList.push(cityData) 
   weather = dataJson.data.current.pollution
-  console.log(weather.aqius)
+  
 }
 
 topRanking = []
@@ -139,13 +140,13 @@ topRanking[0] = {
 }
 topRanking[1] = {
     city: "Lahore",
-    state: "Lahore",
+    state: "Punjab",
     country: "Pakistan",
     pollution: 167
 }
 topRanking[2] = {
     city: "Wuhan",
-    state: "Wuhan",
+    state: "Hubei",
     country: "China",
     pollution: 161
 }
@@ -155,8 +156,8 @@ topRanking[2] = {
 
 
 console.log(citiesList)
-app.get('/three' ,(req, res) =>{
-    res.render("form.ejs", { 
+app.get('/top-polluted' ,(req, res) =>{
+    res.render("topPolluted.ejs", { 
         name: "Ben",
         cityList: topRanking
     })
@@ -190,11 +191,17 @@ app.get('/three' ,(req, res) =>{
 app.get('/', (req,res) =>{
     res.render("index.ejs")
 })
-app.get('/top-polluted', (req,res) =>{
-    res.render("topPolluted.ejs")
+app.get('/top-polluted' ,(req, res) =>{
+    res.render("topPolluted.ejs", { 
+        name: "Ben",
+        cityList: topRanking
+    })
 })
 app.get('/form', (req,res) =>{
-    res.render("form.ejs")
+    res.render("form.ejs",{
+        cityList: citiesList,
+        name: "ben"
+    })
 })
 app.post('/', (req,res)=>{
     res.send(req.body)
