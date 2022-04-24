@@ -163,14 +163,6 @@ topRanking[2] = {
 
 
 
-
-
-app.get('/top-polluted' ,(req, res) =>{
-    res.render("topPolluted.ejs", {
-        name: "Ben",
-        cityList: topRanking
-    })
-})
 app.get('/organizations' ,(req, res) =>{
     res.render("organizations.ejs")
 })
