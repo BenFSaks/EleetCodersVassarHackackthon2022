@@ -10,16 +10,17 @@ app.use(express.static(path.join(__dirname,'public/views')))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");  
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");  
+    res.header("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");
     next();
   })
 //app.use(express.static(path.join(__dirname,'public/css')))
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
-let YOUR_API_KEY = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
+let YOUR_API_KEY = "b23a158b-58cb-4889-9464-60cc78ce9cdc"
+let YOUR_API_KEY_0 = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
 
 
 var https = require('follow-redirects').https;
@@ -28,7 +29,7 @@ var fs = require('fs');
 var options = {
   'method': 'GET',
   'hostname': 'api.airvisual.com',
-  'path': `/v2/cities?state=${STATE_NAME}&country=USA&key=${YOUR_API_KEY}`,
+  'path': `/v2/cities?state=${STATE_NAME}&country=USA&key=b23a158b-58cb-4889-9464-60cc78ce9cdc`,
   'headers': {
   },
   'maxRedirects': 20
@@ -73,17 +74,22 @@ function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
     console.log(citiesJson)
     cityNames = citiesJson.data
-    for(let i = 0; i < 2; i++  ) {
-        getData(cityNames[i].city)
+    for(let i = 0; i < 10; i++ ) {
+      if (i%2 == 0){
+        getData(cityNames[i].city, YOUR_API_KEY)
+      }
+      else {
+        getData(cityNames[i].city, YOUR_API_KEY_0)
+      }
     }
     console.log(cityNames.length)
 }
 
-function getData(city) {
+function getData(city, key) {
   var options2 = {
     'method': 'GET',
     'hostname': 'api.airvisual.com',
-    'path': `/v2/city?city=${city}&state=${STATE_NAME}&country=USA&key=${YOUR_API_KEY}`,
+    'path': `/v2/city?city=${city}&state=${STATE_NAME}&country=USA&key=${key}`,
     'headers': {
     },
     'maxRedirects': 20
@@ -126,9 +132,9 @@ function printCityData(data) {
   cityData.coords = dataJson.data.location.coordinates
   cityData.city = dataJson.data.city
   cityData.pollution = dataJson.data.current.pollution.aqius
-  citiesList.push(cityData) 
+  citiesList.push(cityData)
   weather = dataJson.data.current.pollution
-  
+
 }
 
 topRanking = []
@@ -157,7 +163,7 @@ topRanking[2] = {
 
 console.log(citiesList)
 app.get('/top-polluted' ,(req, res) =>{
-    res.render("topPolluted.ejs", { 
+    res.render("topPolluted.ejs", {
         name: "Ben",
         cityList: topRanking
     })
@@ -192,7 +198,7 @@ app.get('/', (req,res) =>{
     res.render("index.ejs")
 })
 app.get('/top-polluted' ,(req, res) =>{
-    res.render("topPolluted.ejs", { 
+    res.render("topPolluted.ejs", {
         name: "Ben",
         cityList: topRanking
     })
