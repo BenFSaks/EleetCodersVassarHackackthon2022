@@ -156,6 +156,9 @@ app.get('/top-polluted' ,(req, res) =>{
         cityList: topRanking
     })
 })
+app.get('/organizations' ,(req, res) =>{
+    res.render("organizations.ejs")
+})
 
 
 
