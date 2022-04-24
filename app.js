@@ -148,6 +148,9 @@ function printCityData(data) {
 app.get('/', (req,res) =>{
     res.render("index.ejs")
 })
+app.get('/top-polluted', (req,res) =>{
+    res.render("topPolluted.ejs")
+})
 app.get('/form', (req,res) =>{
     res.render("form.ejs")
 })

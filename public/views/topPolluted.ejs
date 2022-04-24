@@ -20,10 +20,10 @@
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                       <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="topPolluted.html">Top Polluted</a>
+                        <a class="nav-link active" aria-current="page" href="/top-polluted">Top Polluted</a>
                       </li>
                   </div>
                 </div>
@@ -31,17 +31,6 @@
         </header>
         <main class="container mt-3"> 
             <h1 class="text-center mb-5">Top Polluted Locations</h1>
-            <form class="row g-3">
-                <div class="col-auto">
-                    <label for="inputPassword2" class="pt-1">Search By Location</label>
-                </div>
-                <div class="col-auto">
-                  <input type="text" class="form-control" id="inputPassword2">
-                </div>
-                <div class="col-auto">
-                  <button type="submit" class="btn btn-primary mb-3">Search</button>
-                </div>
-            </form>
 
             <table class="table">
                 <thead>
@@ -51,7 +40,7 @@
                     <th scope="col">AQL</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="table-data">
                     <tr>
                     <td></td>
                     <td>New York City</td>
@@ -63,5 +52,38 @@
 
     </div>
     
+<script>
+  class TopPolluted{
+    constructor(country, city, AQL){
+      this.innerHTML = `
+        <tr>
+          <td>${country}</td>
+          <td>${city}</td>
+          <td>${AQL}</td>
+        </tr>
+      `
+    }
+  }
+
+  const locations = []
+  fetch('http://localhost:3000/', {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    locations.push(data)
+    locations.forEach(location => {
+      let newTopPolluted = new TopPolluted(location.country, location.city, location.state);
+      document.getElementById('table-data').innerHTML = newTopPolluted.innerHTML;
+  })
+  })
+  .catch(err => console.log(err))
+
+</script>
 </body>
 </html>
