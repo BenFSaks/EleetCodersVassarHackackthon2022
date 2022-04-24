@@ -61,7 +61,6 @@ function loadAQI(){
     })
     getNearCitiesCall.then((response) => {
         let Cities = response
-        console.log(response)
         getCitiesData(Cities)
     }).catch((error) =>{
         console.log(error)
@@ -71,13 +70,6 @@ function loadAQI(){
 
 function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
-<<<<<<< HEAD
-=======
-    console.log(citiesJson)
-    if (citiesJson.status == 'fail'){
-      return
-    }
->>>>>>> main
     cityNames = citiesJson.data
     for(let i = 0; i < 10; i++ ) {
         getData(cityNames[i].city, YOUR_API_KEYS[i%7])
@@ -126,20 +118,12 @@ let citiesList = []
 
 function printCityData(data) {
   dataJson = JSON.parse(data)
-  if (dataJson.status == 'fail'){
-    return
-  }
-  console.log(dataJson)
   cityData = {}
   cityData.coords = dataJson.data.location.coordinates
   cityData.city = dataJson.data.city
   cityData.pollution = dataJson.data.current.pollution.aqius
   citiesList.push(cityData)
   weather = dataJson.data.current.pollution
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 }
 
 topRanking = []
@@ -166,14 +150,8 @@ topRanking[2] = {
 
 
 
-<<<<<<< HEAD
-app.get('/three' ,(req, res) =>{
-    res.render("form.ejs", { 
-=======
-console.log(citiesList)
 app.get('/top-polluted' ,(req, res) =>{
     res.render("topPolluted.ejs", {
->>>>>>> main
         name: "Ben",
         cityList: topRanking
     })
