@@ -7,6 +7,25 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>
+        <%= name %>
+    </h1>
+    <ul>
+        <% cityList.forEach((city) => { %>
+            <li>
+                <h2>
+                    <%= city.city %>
+                </h2>
+                <p>
+                    <%= city.pollution %>
+                </p>
+                <p>
+                    coords lat: <%= city.state %> long: <%= city.country %> 
+                </p>
+            </li>
+
+        <% }) %>
+    </ul>    
     <form action="/" method="post">
         <div class="form-group">
             <label for="exampleFormControlInput1">Country</label>

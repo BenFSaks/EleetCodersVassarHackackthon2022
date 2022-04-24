@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 var app = express()
 
 app.set('views', path.join(__dirname, 'public/views'))
+app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname,'public/views')))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
@@ -18,7 +19,7 @@ app.use(function(req, res, next) {
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
-let YOUR_API_KEY = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
+let YOUR_API_KEY = "b23a158b-58cb-4889-9464-60cc78ce9cdc"
 
 
 var https = require('follow-redirects').https;
@@ -72,7 +73,10 @@ function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
     console.log(citiesJson)
     cityNames = citiesJson.data
-    getData(cityNames[0].city)
+    for(let i = 0; i < 5; i++  ) {
+        getData(cityNames[i].city)
+    }
+    console.log(cityNames.length)
 }
 
 function getData(city) {
@@ -113,12 +117,50 @@ function getData(city) {
       console.log(error)
   })
 }
+let citiesList = []
 
 function printCityData(data) {
   dataJson = JSON.parse(data)
+  cityData = {}
+  cityData.coords = dataJson.data.location.coordinates
+  cityData.city = dataJson.data.city
+  cityData.pollution = dataJson.data.current.pollution.aqius
+  citiesList.push(cityData) 
   weather = dataJson.data.current.pollution
   console.log(weather.aqius)
 }
+
+topRanking = []
+topRanking[0] = {
+    city: "Delhi",
+    state: "Delhi",
+    country: "India",
+    pollution: 228
+}
+topRanking[1] = {
+    city: "Lahore",
+    state: "Lahore",
+    country: "Pakistan",
+    pollution: 167
+}
+topRanking[2] = {
+    city: "Wuhan",
+    state: "Wuhan",
+    country: "China",
+    pollution: 161
+}
+
+
+
+
+
+console.log(citiesList)
+app.get('/three' ,(req, res) =>{
+    res.render("form.ejs", { 
+        name: "Ben",
+        cityList: topRanking
+    })
+})
 
 
 
