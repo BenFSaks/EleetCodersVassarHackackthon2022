@@ -19,9 +19,7 @@ app.use(function(req, res, next) {
 let CITY_NAME = "Beijing"
 let STATE_NAME = "New%20York"
 let COUNTRY_NAME = "China"
-let YOUR_API_KEY = "b23a158b-58cb-4889-9464-60cc78ce9cdc"
-let YOUR_API_KEY_0 = "f5a0c748-5f7b-4e84-b306-d7648b37560b"
-
+let YOUR_API_KEYS = ["8dfd441d-056a-47dc-99c5-c963c191a9c2","2e8262db-5b85-41c7-823b-6daef46b84ea","b23a158b-58cb-4889-9464-60cc78ce9cdc","f5a0c748-5f7b-4e84-b306-d7648b37560b","c56c9652-fdfe-4192-98f8-d60ff2452d0e","885aa734-2186-40e5-a9ff-3c29a7b6fd1e","8da51ed9-a5ca-4a8f-ae05-4f54b5aa33df"]
 
 var https = require('follow-redirects').https;
 var fs = require('fs');
@@ -73,14 +71,12 @@ function loadAQI(){
 function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
     console.log(citiesJson)
+    if (citiesJson.status == 'fail'){
+      return
+    }
     cityNames = citiesJson.data
     for(let i = 0; i < 10; i++ ) {
-      if (i%2 == 0){
-        getData(cityNames[i].city, YOUR_API_KEY)
-      }
-      else {
-        getData(cityNames[i].city, YOUR_API_KEY_0)
-      }
+        getData(cityNames[i].city, YOUR_API_KEYS[i%7])
     }
     console.log(cityNames.length)
 }
@@ -127,6 +123,9 @@ let citiesList = []
 
 function printCityData(data) {
   dataJson = JSON.parse(data)
+  if (dataJson.status == 'fail'){
+    return
+  }
   console.log(dataJson)
   cityData = {}
   cityData.coords = dataJson.data.location.coordinates
