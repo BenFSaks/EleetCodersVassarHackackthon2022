@@ -20,7 +20,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                  <a class="navbar-brand" href="#">Navbar</a>
+                  <a class="navbar-brand" href="#"><h3>Pollution Monitor</h3></a>
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
@@ -70,9 +70,6 @@
                         </thead>
                         <tbody id="table-data">
                             <tr>
-                            <td>New York City</td>
-                            <td>###</td>
-                            <td><i class="fa-solid fa-circle-info" id="view"></i></td>
                             </tr>
                         </tbody>
                         </table>
@@ -87,11 +84,11 @@
     <script>
         var map;
         class NearBy{
-            constructor(country, city, state) {
+            constructor(country, AQL) {
                 this.innerHTML = `<tr>
                                     <td>${country}</td>
-                                    <td>${city}</td>
-                                    <td><i class="fa-solid fa-circle-info" id="view"></i></td>
+                                    <td>${AQL}</td>
+                                    <td><i class="fa-solid fa-circle-info view"></i></td>
                                 </tr>`;
             }
         }
@@ -107,7 +104,7 @@
             let city = document.getElementById('city').value;
             let state = document.getElementById('state').value;
 
-            fetch('http://localhost:3000/', {
+            fetch('http://localhost:3000/near-by', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
@@ -121,29 +118,84 @@
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 locations.push(data);
                 locations.forEach(location => {
-                let newNearBy = new NearBy(location.country, location.city, location.state);
-                document.getElementById('table-data').innerHTML = newNearBy.innerHTML;
+                    location.forEach(loc => {
+                        let newNearBy = new NearBy(loc.city, loc.pollution);
+                        document.getElementById('table-data').innerHTML += newNearBy.innerHTML;
+                    })
                 });
+            }).then(()=>{
+                let view = document.getElementsByClassName('view');
+                for(let i = 0; i < view.length; i++){
+                    view[i].addEventListener('click', function(){
+                        console.log(locations[0][i]);
+                        let lat = locations[0][i].coords[0];
+                        let lng = locations[0][i].coords[1];
+                        let map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: lat, lng: lng},
+                            zoom: 10
+                        });
+                        let marker = new google.maps.Marker({
+                            position: {lat: lat, lng: lng},
+                            map: map
+                        });
+                    })
+                }
             })
         }
 
-        window.onload = () => {
-            let view = document.querySelectorAll('#view');
-            view.forEach(v => {
-                v.addEventListener('click', () => {
-                    map = new google.maps.Map(document.getElementById('map'), {
-                    center: {
-                        lat: location.coordinates[0],
-                        lng: location.coordinates[1]
-                    },
-                    zoom: 6
-                    })
-                });
-            });
-        }
+        // function addEV(){
+        //     let view = document.getElementsByClassName('view');
+        //     for(let i = 0; i < view.length; i++){
+        //         view[i].addEventListener('click', function(){
+        //             let lat = locations[i][0].latitude;
+        //             let lng = locations[i][0].longitude;
+        //             let map = new google.maps.Map(document.getElementById('map'), {
+        //                 center: {lat: lat, lng: lng},
+        //                 zoom: 10
+        //             });
+        //             let marker = new google.maps.Marker({
+        //                 position: {lat: lat, lng: lng},
+        //                 map: map
+        //             });
+        //         })
+        //     }
+        // }
+            // let view = document.getElementsByClassName('view');
+            // console.log(view)
+            // view.addEventListener('click', function(){
+            //     console.log(view)
+            // })
+            // for(let i = 0, len = view.length; i < len; i++)
+            // {
+            //     view[i].addEventListener('click', () => {
+            //         console.log(locations[i][0]);
+            //         let lat = locations[i][0].coordinates.latitude;
+            //         let lng = locations[i][0].coordinates.longitude;
+            //         let map = new google.maps.Map(document.getElementById('map'), {
+            //             center: {lat: lat, lng: lng},
+            //             zoom: 6
+            //         });
+            //         let marker = new google.maps.Marker({
+            //             position: {lat: lat, lng: lng},
+            //             map: map
+            //         });
+            //     })
+            
+            // view.forEach(v => {
+            //     v.addEventListener('click', () => {
+            //         console.log(v)
+            //         map = new google.maps.Map(document.getElementById('map'), {
+            //         center: {
+            //             lat: location.coords[0],
+            //             lng: location.coords[1]
+            //         },
+            //         zoom: 6
+            //         })
+            //     });
+            // });
+        //}
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -151,6 +203,21 @@
                 zoom: 6
             });
         }
+
+        var markers = locations.map(location => {
+            var marker = new google.maps.Marker({
+                position: {
+                    lat: location.coords[0],
+                    lng: location.coords[1]
+                },
+                map: map,
+            });
+
+            marker.addListener('click', function() {
+                infoWindow.setContent(location.city);
+                infoWindow.open(map, marker);
+            });
+        });
 
 
 

@@ -62,6 +62,7 @@ function loadAQI(){
     })
     getNearCitiesCall.then((response) => {
         let Cities = response
+        console.log(response)
         getCitiesData(Cities)
     }).catch((error) =>{
         console.log(error)
@@ -71,12 +72,10 @@ function loadAQI(){
 
 function getCitiesData(cities){
     citiesJson = JSON.parse(cities)
-    console.log(citiesJson)
     cityNames = citiesJson.data
     for(let i = 0; i < 2; i++  ) {
         getData(cityNames[i].city)
     }
-    console.log(cityNames.length)
 }
 
 function getData(city) {
@@ -128,7 +127,6 @@ function printCityData(data) {
   cityData.pollution = dataJson.data.current.pollution.aqius
   citiesList.push(cityData) 
   weather = dataJson.data.current.pollution
-  
 }
 
 topRanking = []
@@ -155,9 +153,8 @@ topRanking[2] = {
 
 
 
-console.log(citiesList)
-app.get('/top-polluted' ,(req, res) =>{
-    res.render("topPolluted.ejs", { 
+app.get('/three' ,(req, res) =>{
+    res.render("form.ejs", { 
         name: "Ben",
         cityList: topRanking
     })
@@ -203,8 +200,12 @@ app.get('/form', (req,res) =>{
         name: "ben"
     })
 })
-app.post('/', (req,res)=>{
-    res.send(req.body)
+app.post('/near-by', (req,res)=>{
+    CITY_NAME = req.body.city
+    STATE_NAME = req.body.state
+    COUNTRY_NAME = req.body.country
+    loadAQI()
+    res.send(citiesList)
 })
 
 app.listen(3000)

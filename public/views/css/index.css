@@ -2,4 +2,14 @@
 #top-polluted .nav-link,
 #locations .nav-link{
     padding: 0 20px;
+    font-size: 18px;
+}
+#home .nav-link:hover,
+#top-polluted .nav-link:hover,
+#locations .nav-link:hover{
+    color: black;
+    font-weight: 600;
+}
+.navbar-brand{
+    font-family: cursive;
 }
